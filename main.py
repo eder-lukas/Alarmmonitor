@@ -10,13 +10,12 @@ app = None
 
 
 def main():
+    # Start Gui Thread
     if __name__ == "__main__":
         app = App()
         gui_thread = threading.Thread(target=app.start_application)
         gui_thread.start()
-        time.sleep(2)
-
-    test_counter = 1
+        time.sleep(2) # Wait for GUI to start -> to avoid problems accessing app's attributes
 
     while True:
         mails = getUnseenMails()
@@ -26,8 +25,8 @@ def main():
             print("Betreff:", mail.subject)
             print("Inhalt:", mail.content)
             print("-----------------------------------")
-        app.update_content(str(test_counter))
-        test_counter = test_counter + 1
+            if ("@fitt-gmbh.de" in mail.sender):
+                app.update_content(mail.content)
         time.sleep(10)  # Warten Sie 10 Sekunden, bevor Sie erneut überprüfen
 
 
