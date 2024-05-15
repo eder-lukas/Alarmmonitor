@@ -2,7 +2,7 @@ from .mail import Mail
 import imaplib
 import email
 
-def getUnseenMails() -> list[Mail]:
+def get_unseen_mails() -> list[Mail]:
     # Verbindung zum IMAP-Server herstellen
     mail = imaplib.IMAP4_SSL('imap.gmx.net')  # IMAP-Server-Adresse eintragen
     mail.login('alarmmonitor-ffsinning@gmx.de', '.(et\'*f9^W"mg>jY37-bM%3Ue&Y*5U')  
