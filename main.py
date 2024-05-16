@@ -20,11 +20,15 @@ def main():
     while True:
         mails = get_unseen_mails()
         for mail in mails: 
+            print()
+            print("-----------------------------------")
+            print("Neue Mail empfangen:")
             print("-----------------------------------")
             print("Sender:", mail.sender)
             print("Betreff:", mail.subject)
             print("Inhalt:", mail.content)
             print("-----------------------------------")
+            print()
             if (load_subject_filter() in mail.subject and load_sender_filter() in mail.sender):
                 app.update_content(mail.parse_content())
         time.sleep(10)
