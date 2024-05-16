@@ -1,5 +1,6 @@
 from mail_client.mail import Mail
 from mail_client.get_mails import get_unseen_mails
+from load_env import load_sender_filter, load_subject_filter
 from gui.app import App
 import time
 import threading
@@ -24,11 +25,8 @@ def main():
             print("Betreff:", mail.subject)
             print("Inhalt:", mail.content)
             print("-----------------------------------")
-            if ("@fitt-gmbh.de" in mail.sender):
+            if (load_subject_filter() in mail.subject and load_sender_filter() in mail.sender):
                 app.update_content(mail.parse_content())
-        time.sleep(10)  # Warten Sie 10 Sekunden, bevor Sie erneut überprüfen
+        time.sleep(10)
 
 main()
-
-
-#namenskonvention

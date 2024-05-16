@@ -1,11 +1,12 @@
 from .mail import Mail
+from load_env import load_mail, load_password, load_imap_server_address
 import imaplib
 import email
 
 def get_unseen_mails() -> list[Mail]:
     # Verbindung zum IMAP-Server herstellen
-    mail = imaplib.IMAP4_SSL('imap.gmx.net')  # IMAP-Server-Adresse eintragen
-    mail.login('alarmmonitor-ffsinning@gmx.de', '.(et\'*f9^W"mg>jY37-bM%3Ue&Y*5U')  
+    mail = imaplib.IMAP4_SSL(load_imap_server_address())
+    mail.login(load_mail(), load_password())  
     
     # Postfach auswählen
     mail.select('inbox')
