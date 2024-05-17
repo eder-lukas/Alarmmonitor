@@ -33,4 +33,5 @@ def main():
                 app.update_content(mail.parse_content())
         time.sleep(10)
 
+
 main()
