@@ -1,44 +1,92 @@
 import tkinter as tk
 from tkinter import ttk
+import tkintermapview
 
 class App:
 
+
     def __init__(self):
         self.window = None
-        self.label = None
-        self.label_content = None
+        self.left_block = None # space for text
+        self.right_block = None # space for map
+        self.map_widget = None
+        self.line_widgets = []
+
 
     def start_application(self):
         # Tkinter-window
         self.window = tk.Tk()
-        self.window.title("Alarmmonitor")
+        self.window.title('Alarmmonitor')
         self.window.attributes('-fullscreen', True)
 
-        # Style for Treeview
-        style = ttk.Style()
-        style.configure("Treeview", font=("Helvetica", 18))
-        style.configure("Treeview.Heading", font=("Helvetica", 18))
-        style.configure("Treeview", rowheight=40)
+        # configure column widths
+        self.window.grid_columnconfigure(0, weight=1, uniform='column')
+        self.window.grid_columnconfigure(1, weight=1, uniform='column')
+        self.window.grid_rowconfigure(0, weight=1)
 
-        # Erstellen Sie eine Treeview-Tabelle
-        self.tree = ttk.Treeview(self.window, style="Treeview", height=25)
-        self.tree["columns"] = ("value")
-        self.tree.column("#0", minwidth=100, stretch=tk.NO)
-        self.tree.column("value", minwidth=200)
-        self.tree.heading("#0", text="Eigenschaft")
-        self.tree.heading("value", text="Wert")
+        self.left_block = ttk.Frame(self.window)
+        self.left_block.grid(row=0, column=0, sticky='nesw')
 
-        self.tree.pack(expand=True, fill=tk.BOTH, padx=20, pady=20)
+        self.right_block = ttk.Frame(self.window)
+        self.right_block.grid(row=0, column=1, sticky='nesw')
 
-        # Starten Sie die Tkinter-Hauptereignisschleife
+        # Configure the blocks to expand properly
+        self.right_block.grid_rowconfigure(0, weight=1)
+        self.right_block.grid_columnconfigure(0, weight=1)
+        self.left_block.grid_columnconfigure(0, weight=1)
+
+        self._insert_map()
+
         self.window.mainloop()
 
+
     def update_content(self, content: dict):
-        # Löschen Sie die vorhandenen Einträge in der Tabelle
-        for item in self.tree.get_children():
-            self.tree.delete(item)
+        if(len(content) == 0):
+            return
+        
+        self.delete_entries()
 
-        # Fügen Sie die aktualisierten Inhalte zur Tabelle hinzu
+        key_widgets = []
+        value_widgets = []
+
+        i = 0
+        # Add new content to left_block
         for key, value in content.items():
-            self.tree.insert("", "end", text=key, values=(value,))
+            #create new Line for a key-value pair
+            new_line_widget = ttk.Label(self.left_block, background='grey')
+            new_line_widget.grid(row=i, column=0, sticky='nesw') #nw
+            self.line_widgets.append(new_line_widget)
+            i += 1
 
+            line_separator = tk.Canvas(self.left_block, height=2, bg='black', highlightthickness=0)
+            line_separator.grid(row=i, column=0, sticky='nesw') #ew
+            i += 1
+
+            key_widget = ttk.Label(new_line_widget, text=key, background='yellow', width=15, font=('Helvetica', 28, 'bold')) # width in characters (depending on font)
+            value_widget = ttk.Label(new_line_widget, text=value, background='blue', font=('Helvetica', 28, 'bold')) # no width -> expand in x direction because of side left
+            
+            key_widget.grid(row=0, column=0, sticky='nsw')
+            value_widget.grid(row=0, column=1, sticky='nesw')
+
+            key_widgets.append(key_widget)
+            value_widgets.append(value_widget) # save all value labels for setting wraplength aferwards
+
+        self.window.after(10, self._set_value_wraplengths(key_widgets, value_widgets))
+
+
+    def delete_entries(self):
+        for widget in self.left_block.winfo_children():
+            widget.destroy()
+
+
+    def _set_value_wraplengths(self, key_widgets, value_widgets):
+        self.left_block.update_idletasks()
+        wrap_len = self.window.winfo_width() - self.right_block.winfo_width() - key_widgets[0].winfo_width()
+        for label in value_widgets:
+            label.configure(wraplength=wrap_len)
+
+
+    def _insert_map(self):
+        self.map_widget = tkintermapview.TkinterMapView(self.right_block)
+        self.map_widget.grid(row=0, column=0, sticky='nesw')
+        self.map_widget.set_position(48.688687, 11.109092)
