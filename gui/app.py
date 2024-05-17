@@ -53,7 +53,7 @@ class App:
         # Add new content to left_block
         for key, value in content.items():
             #create new Line for a key-value pair
-            new_line_widget = ttk.Label(self.left_block, background='grey')
+            new_line_widget = ttk.Label(self.left_block)
             new_line_widget.grid(row=i, column=0, sticky='nesw') #nw
             self.line_widgets.append(new_line_widget)
             i += 1
@@ -62,8 +62,8 @@ class App:
             line_separator.grid(row=i, column=0, sticky='nesw') #ew
             i += 1
 
-            key_widget = ttk.Label(new_line_widget, text=key, background='yellow', width=15, font=('Helvetica', 28, 'bold')) # width in characters (depending on font)
-            value_widget = ttk.Label(new_line_widget, text=value, background='blue', font=('Helvetica', 28, 'bold')) # no width -> expand in x direction because of side left
+            key_widget = ttk.Label(new_line_widget, text=key, background='grey', width=15, font=('Helvetica', 36, 'bold')) # width in characters (depending on font)
+            value_widget = ttk.Label(new_line_widget, text=value, font=('Helvetica', 36, 'bold')) # no width -> expand in x direction because of side left
             
             key_widget.grid(row=0, column=0, sticky='nsw')
             value_widget.grid(row=0, column=1, sticky='nesw')

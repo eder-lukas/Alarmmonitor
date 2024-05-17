@@ -1,8 +1,8 @@
 # Alarmierungsmail Aufbau
 Die Alarmierungsmail muss wie Folgt aufgebaut sein:
 
-Keyword: Inhalt
-Keyword: Inhalt
+Keyword; Inhalt
+Keyword; Inhalt
 ...
 
 Dieser Aufbau wird dann in einer tabellarischen Übersicht dargestellt.
