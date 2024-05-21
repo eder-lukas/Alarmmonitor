@@ -7,6 +7,17 @@ Keyword; Inhalt
 
 Dieser Aufbau wird dann in einer tabellarischen Übersicht dargestellt.
 
+# Aufbau, um Adresse in Karte anzuzeigen
+Um die Adresse der Alamierung in der Karte anzuzeigen müssen die folgenden Keywords in der genannten Reihenfolge vorhanden sein.
+Es dürfen dabei andere Keywords dazwischen vorkommen.
+
+Strasse; ...
+Hausnummer; ...
+PLZ; ...
+Ort; ...
+
+Wenn dieser Aufbau bei Ihnen nicht zutrifft, kann die Verarbeitung der Inhalts zur Adresse in der Datei mail.py -> get_address_from_content angepasst werden.
+Falls die Adresse nicht aufgelöst werden kann, ändert sich an der Karte nichts. Der Text wird dennoch angezeigt.
 
 # Alarmmonitor Environment
 Es muss eine alarmmonitor.env Datei im Root-Verzeichnis geben (selbe Ebene wie main.py).

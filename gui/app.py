@@ -1,6 +1,7 @@
+from .map import Map
+from mail_client.mail import get_address_from_content
 import tkinter as tk
 from tkinter import ttk
-import tkintermapview
 
 class App:
 
@@ -9,7 +10,7 @@ class App:
         self.window = None
         self.left_block = None # space for text
         self.right_block = None # space for map
-        self.map_widget = None
+        self.map = None
         self.line_widgets = []
 
 
@@ -35,7 +36,7 @@ class App:
         self.right_block.grid_columnconfigure(0, weight=1)
         self.left_block.grid_columnconfigure(0, weight=1)
 
-        self._insert_map()
+        self.map = Map(self.right_block)
 
         self.window.mainloop()
 
@@ -44,7 +45,7 @@ class App:
         if(len(content) == 0):
             return
         
-        self.delete_entries()
+        self.reset_view()
 
         key_widgets = []
         value_widgets = []
@@ -72,11 +73,13 @@ class App:
             value_widgets.append(value_widget) # save all value labels for setting wraplength aferwards
 
         self.window.after(10, self._set_value_wraplengths(key_widgets, value_widgets))
+        self.map.set_position_by_address(get_address_from_content(content))
 
 
-    def delete_entries(self):
+    def reset_view(self):
         for widget in self.left_block.winfo_children():
             widget.destroy()
+        self.map.reset_map()
 
 
     def _set_value_wraplengths(self, key_widgets, value_widgets):
@@ -84,9 +87,3 @@ class App:
         wrap_len = self.window.winfo_width() - self.right_block.winfo_width() - key_widgets[0].winfo_width()
         for label in value_widgets:
             label.configure(wraplength=wrap_len)
-
-
-    def _insert_map(self):
-        self.map_widget = tkintermapview.TkinterMapView(self.right_block)
-        self.map_widget.grid(row=0, column=0, sticky='nesw')
-        self.map_widget.set_position(48.688687, 11.109092)

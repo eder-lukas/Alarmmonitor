@@ -1,3 +1,8 @@
+KEYWORD_STRASSE='Strasse'
+KEYWORD_HAUSNUMMER='Hausnummer'
+KEYWORD_PLZ='PLZ'
+KEYWORD_ORT='Ort'
+
 class Mail:
     def __init__(self, sender, subject, content):
         self.sender = sender
@@ -13,3 +18,17 @@ class Mail:
                 if (len(parts[1].strip()) >= 1): # to filter empty values
                     res.update({parts[0].strip() : parts[1].strip()})
         return res
+
+
+def get_address_from_content(content: dict) -> str:
+    address = ''
+    for key, value in content.items():
+        if key == KEYWORD_STRASSE:
+            address = value
+        elif key == KEYWORD_HAUSNUMMER: 
+            address = address + " " + value
+        elif key == KEYWORD_PLZ:
+            address = address + ", " + value
+        elif key == KEYWORD_ORT:
+            address = address + " " + value
+    return address
