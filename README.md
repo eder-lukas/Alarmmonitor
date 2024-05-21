@@ -32,6 +32,16 @@ Klone das Git-Repo
 
 Lege alarmmonitor.env in dem Ordner an und befülle die Datei (siehe oben)
 
+## Bildschirmschoner deaktivieren:
+Im Terminal mit 
+sudo nano /etc/xdg/lxsession/LXDE-pi/autostart
+Datei /etc/xdg/lxsession/LXDE-pi/autostart öffenen und folgende Zeilen hinzufügen:
+
+@xset s off
+@xset -dpms
+@xset s noblank
+
+
 ## Virtuelle Umgebung erstellen: 
 Im Terminal:
 cd /root-folder-of-alarmmonitor
@@ -51,8 +61,7 @@ Im Terminal:
 Touch ~/Desktop/Alarmmonitor.sh
 chmod +x Alarmmonitor.sh
 
-# noch ändern!!
-Datei bearbeiten:  
+->Datei bearbeiten:  
 #!/bin/bash
 
 sleep 10
@@ -63,7 +72,7 @@ echo "Cronjob started at $(date)" >> LOGFILE
 export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
 export DISPLAY=:0
 
-xhost +SI:localuser:FFSinning (brauchts evtl garnich)
+xhost +SI:localuser:FFSinning (eventuell nicht benötigt)
 
 source /Path-to-Alarmmonitor/venv/bin/activate
 python /Path-to-Alarmmonitor/main.py
