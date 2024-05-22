@@ -2,6 +2,7 @@ from .map import Map
 from mail_client.mail import get_address_from_content
 import tkinter as tk
 from tkinter import ttk
+from tkinter import Button
 
 class App:
 
@@ -12,6 +13,7 @@ class App:
         self.right_block = None # space for map
         self.map = None
         self.line_widgets = []
+        self.reset_button = None
 
 
     def start_application(self):
@@ -37,6 +39,12 @@ class App:
         self.left_block.grid_columnconfigure(0, weight=1)
 
         self.map = Map(self.right_block)
+
+        # Add button in the right buttom corner of the right_block
+        self.reset_button = Button(self.right_block, text="reset")
+        self.reset_button.place(relx=1.0, rely=0.0, anchor='ne', x=-10, y=10) # 10 pixels padding from right and bottom
+        self.reset_button.config(command=self.reset_view)
+
 
         self.window.mainloop()
 
