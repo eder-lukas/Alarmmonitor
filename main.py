@@ -5,9 +5,9 @@ from gui.app import App
 import time
 import threading
 
+
 gui_thread = None
 app = None
-
 
 def main():
     # Start Gui Thread
@@ -18,7 +18,12 @@ def main():
         time.sleep(2) # Wait for GUI to start -> to avoid problems accessing app's attributes
 
     while True:
-        mails = get_unseen_mails()
+        try: # get mails in try except -> otherwise program will crash when the internet connection is interrupted
+            mails = get_unseen_mails()
+        except:
+            print("not able to get mails from server")
+            pass
+
         for mail in mails: 
             print()
             print("-----------------------------------")
@@ -31,7 +36,10 @@ def main():
             print()
             if (load_subject_filter() in mail.subject and load_sender_filter() in mail.sender):
                 app.update_content(mail.parse_content())
-        time.sleep(10)
 
+        if (gui_thread.is_alive()): # when gui is closed, kill the whole program
+            time.sleep(10)
+        else:
+            exit(1)
 
 main()
