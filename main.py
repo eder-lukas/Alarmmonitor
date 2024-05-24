@@ -18,24 +18,26 @@ def main():
         time.sleep(2) # Wait for GUI to start -> to avoid problems accessing app's attributes
 
     while True:
+        mails = None
         try: # get mails in try except -> otherwise program will crash when the internet connection is interrupted
             mails = get_unseen_mails()
         except:
             print("not able to get mails from server")
             pass
 
-        for mail in mails: 
-            print()
-            print("-----------------------------------")
-            print("Neue Mail empfangen:")
-            print("-----------------------------------")
-            print("Sender:", mail.sender)
-            print("Betreff:", mail.subject)
-            print("Inhalt:", mail.content)
-            print("-----------------------------------")
-            print()
-            if (load_subject_filter() in mail.subject and load_sender_filter() in mail.sender):
-                app.update_content(mail.parse_content())
+        if mails:
+            for mail in mails: 
+                print()
+                print("-----------------------------------")
+                print("Neue Mail empfangen:")
+                print("-----------------------------------")
+                print("Sender:", mail.sender)
+                print("Betreff:", mail.subject)
+                print("Inhalt:", mail.content)
+                print("-----------------------------------")
+                print()
+                if (load_subject_filter() in mail.subject and load_sender_filter() in mail.sender):
+                    app.update_content(mail.parse_content())
 
         if (gui_thread.is_alive()): # when gui is closed, kill the whole program
             time.sleep(10)
