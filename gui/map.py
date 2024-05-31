@@ -26,7 +26,11 @@ class Map:
 
     def set_position_by_address(self, address):
         if address:
-            location = self.geolocator.geocode(address)
+            location = None
+            try:
+                location = self.geolocator.geocode(address)
+            except:
+                pass
             if location:
                 self.set_position(location.latitude, location.longitude)
                 self._set_marker(location.latitude, location.longitude)
