@@ -2,6 +2,7 @@ KEYWORD_STRASSE='Strasse'
 KEYWORD_HAUSNUMMER='Hausnummer'
 KEYWORD_PLZ='PLZ'
 KEYWORD_ORT='Ort'
+KEYWORD_ADRESSE='Adresse'
 KEYWORD_SEPARATOR=';'
 
 class Mail:
@@ -10,7 +11,14 @@ class Mail:
         self.subject = subject
         self.content = content
     
+
     def parse_content(self) -> dict:
+        content = self._get_content_into_dict()
+        content = self._summarize_address(content)
+        return content
+    
+    
+    def _get_content_into_dict(self) -> dict:
         last_keyword = None
         res = {}
         lines = self.content.splitlines()
@@ -32,15 +40,46 @@ class Mail:
         return res
 
 
-def get_address_from_content(content: dict) -> str:
-    address = ''
-    for key, value in content.items():
-        if key == KEYWORD_STRASSE:
-            address = value
-        elif key == KEYWORD_HAUSNUMMER: 
-            address = address + " " + value
-        elif key == KEYWORD_PLZ:
-            address = address + ", " + value
-        elif key == KEYWORD_ORT:
-            address = address + " " + value
-    return address
+    def _summarize_address(self, content: dict) -> dict:
+        """
+        this method summarizes the address. It takes street, house number, postal code and city together
+        """
+        street, house_number, postal_code, city = None, None, None, None
+
+        for key, value in content.items():
+            if key == KEYWORD_STRASSE:
+                street = value
+            elif key == KEYWORD_HAUSNUMMER:
+                house_number = value
+            elif key == KEYWORD_PLZ:
+                postal_code = value
+            elif key == KEYWORD_ORT:
+                city = value
+
+        address = ''
+        if street:
+            address = address + street + " "
+            del content[KEYWORD_STRASSE]
+        if house_number:
+            address = address + house_number + " "
+            del content[KEYWORD_HAUSNUMMER]
+        if postal_code:
+            address = address + postal_code + " "
+            del content[KEYWORD_PLZ]
+        if city:
+            address = address + city
+            del content[KEYWORD_ORT]
+
+        content = self._insert_address_in_pos(content, address, 3)
+        return content
+
+    def _insert_address_in_pos(self, content: dict, address, pos) -> dict:
+        res = {}
+        i = 0
+        for key, value in content.items():
+            if i == pos:
+                res[KEYWORD_ADRESSE] = address
+                i += 1
+            res[key] = value
+            i += 1
+        return res

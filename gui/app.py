@@ -1,11 +1,10 @@
 from .map import Map
-from mail_client.mail import get_address_from_content
+from mail_client.mail import KEYWORD_ADRESSE
 import tkinter as tk
 from tkinter import ttk
 from tkinter import Button
 
 class App:
-
 
     def __init__(self):
         self.window = None
@@ -81,7 +80,7 @@ class App:
             value_widgets.append(value_widget) # save all value labels for setting wraplength aferwards
 
         self.window.after(10, self._set_value_wraplengths(key_widgets, value_widgets))
-        self.map.set_position_by_address(get_address_from_content(content))
+        self.map.set_position_by_address(content[KEYWORD_ADRESSE])
 
 
     def reset_view(self):

@@ -5,7 +5,6 @@ from gui.app import App
 from datetime import datetime
 import time
 import threading
-import os
 
 gui_thread = None
 app = None
