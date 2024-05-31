@@ -75,9 +75,9 @@ chmod +x Alarmmonitor.sh
 ->Datei bearbeiten:  
 #!/bin/bash
 
-sleep 10
+sleep 15
 
-LOGFILE=/home/FFSinning/Desktop/cronjob.log
+LOGFILE=/home/FFSinning/Desktop/alarmmonitor.log
 echo "Cronjob started at $(date)" >> LOGFILE
 
 export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
@@ -85,9 +85,10 @@ export DISPLAY=:0
 
 xhost +SI:localuser:FFSinning (eventuell nicht benötigt)
 
-source /Path-to-Alarmmonitor/venv/bin/activate
-python /Path-to-Alarmmonitor/main.py
+source /Path-to-Alarmmonitor/venv/bin/activate >> $LOGFILE 2>&1
+python -u /Path-to-Alarmmonitor/main.py >> $LOGFILE 2>&1
 deactivate
+echo "Cronjob ended at $(date)" >> $LOGFILE
 
 
 Im Terminal:

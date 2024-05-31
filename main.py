@@ -35,7 +35,7 @@ def main():
             for mail in mails: 
                 print()
                 print("-----------------------------------")
-                print("Neue Mail empfangen:")
+                print("Neue Mail empfangen am " + datetime.now().strftime("%d.%m.%Y um %H:%M:%S"))
                 print("-----------------------------------")
                 print("Sender:", mail.sender)
                 print("Betreff:", mail.subject)
@@ -48,6 +48,7 @@ def main():
         if (gui_thread.is_alive()): # when gui is closed, kill the whole program
             time.sleep(10)
         else:
+            print("Programm wird beendet, weil GUI beendet wurde am " + datetime.now().strftime("%d.%m.%Y um %H:%M:%S"))
             exit(1)
 
 main()
