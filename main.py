@@ -23,7 +23,7 @@ def main():
 
         if mails:
             for mail in mails: 
-                printMail(mail)
+                print_mail_info(mail)
                 if (load_subject_filter() in mail.subject and load_sender_filter() in mail.sender):
                     app.update_content(mail.parse_content())
 
@@ -34,14 +34,12 @@ def main():
             exit(1)
 
 
-def printMail(mail):
+def print_mail_info(mail):
     print()
     print("-----------------------------------")
     print("Neue Mail empfangen am " + datetime.now().strftime("%d.%m.%Y um %H:%M:%S"))
     print("-----------------------------------")
-    print("Sender:", mail.sender)
     print("Betreff:", mail.subject)
-    print("Inhalt:", mail.content)
     print("-----------------------------------")
     print()
 
