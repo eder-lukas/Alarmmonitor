@@ -3,6 +3,7 @@ KEYWORD_HAUSNUMMER='Hausnummer'
 KEYWORD_PLZ='PLZ'
 KEYWORD_ORT='Ort'
 KEYWORD_ADRESSE='Adresse'
+KEYWORD_ADDSESS_WITHOUT_CITY='address_without_city'
 KEYWORD_SEPARATOR=';'
 
 class Mail:
@@ -66,19 +67,23 @@ class Mail:
         if postal_code:
             address = address + postal_code + " "
             del content[KEYWORD_PLZ]
+
+        # insert address without city for map parsing
+        content = self._insert_keyword_and_value_in_pos(content, KEYWORD_ADDSESS_WITHOUT_CITY, address, 0)
+
         if city:
             address = address + city
             del content[KEYWORD_ORT]
 
-        content = self._insert_address_in_pos(content, address, 3)
+        content = self._insert_keyword_and_value_in_pos(content, KEYWORD_ADRESSE, address, 3)
         return content
 
-    def _insert_address_in_pos(self, content: dict, address, pos) -> dict:
+    def _insert_keyword_and_value_in_pos(self, content: dict, keyword, value_to_insert, pos) -> dict:
         res = {}
         i = 0
         for key, value in content.items():
             if i == pos:
-                res[KEYWORD_ADRESSE] = address
+                res[keyword] = value_to_insert
                 i += 1
             res[key] = value
             i += 1

@@ -25,10 +25,11 @@ def main():
             for mail in mails: 
                 print_mail_info(mail)
                 if (load_subject_filter() in mail.subject and load_sender_filter() in mail.sender):
-                    app.update_content(mail.parse_content())
+                    content = mail.parse_content()
+                    app.update_content(content)
 
         if (gui_thread.is_alive()): # when gui is closed, kill the whole program
-            time.sleep(10)
+            time.sleep(1)
         else:
             print("Programm wird beendet, weil GUI beendet wurde am " + datetime.now().strftime("%d.%m.%Y um %H:%M:%S"))
             exit(1)

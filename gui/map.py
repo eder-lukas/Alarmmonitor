@@ -24,13 +24,20 @@ class Map:
             self.map_widget.set_position(latitude, longitude)
 
 
-    def set_position_by_address(self, address):
+    def set_position_by_address(self, address, address_without_city):
         if address:
             location = None
             try:
                 location = self.geolocator.geocode(address)
             except:
                 pass
+
+            if not location:
+                try:
+                    location = self.geolocator.geocode(address_without_city)
+                except:
+                    pass
+
             if location:
                 self.set_position(location.latitude, location.longitude)
                 self._set_marker(location.latitude, location.longitude)

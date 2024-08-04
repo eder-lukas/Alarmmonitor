@@ -58,6 +58,8 @@ class App:
         key_widgets = []
         value_widgets = []
 
+        content, address_without_city = self._remove_address_without_content(content)
+
         i = 0
         # Add new content to left_block
         for key, value in content.items():
@@ -81,7 +83,7 @@ class App:
             value_widgets.append(value_widget) # save all value labels for setting wraplength aferwards
 
         self.window.after(10, self._set_value_wraplengths(key_widgets, value_widgets))
-        self.map.set_position_by_address(content[KEYWORD_ADRESSE])
+        self.map.set_position_by_address(content[KEYWORD_ADRESSE], address_without_city)
         print("Anzeigeinhalt aktualisiert am " + datetime.now().strftime("%d.%m.%Y um %H:%M:%S"))
 
 
@@ -97,3 +99,13 @@ class App:
         wrap_len = self.window.winfo_width() - self.right_block.winfo_width() - key_widgets[0].winfo_width()
         for label in value_widgets:
             label.configure(wraplength=wrap_len)
+
+    def _remove_address_without_content(self, content: dict):
+        if not content:
+            return None
+
+        # get and remove first entry
+        first_key = next(iter(content))
+        first_value = content.pop(first_key)
+
+        return content, first_value
