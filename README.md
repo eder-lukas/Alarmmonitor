@@ -6,9 +6,33 @@ Keyword; Inhalt
 ...
 
 Dieser Aufbau wird dann in einer tabellarischen Übersicht dargestellt.
+Beispielaufbau für Poweralarm:
+
+Schlagwort; [SCHLAGWORT]
+Stichwort; [STICHWORT]
+Bemerkung; [BEMERKUNG]
+Strasse; [STRASSE] 
+Hausnummer; [HAUSNUMMER] 
+PLZ; [PLZ]
+Ort; [ORT]
+Ortsteil; [ORTSTEIL]
+Abschnitt; [ABSCHNITT]
+Mitteiler; [MITTEILER]
+Mitteiler Kontakt; [MITTEILER_KONTAKT]
+Objekt; [OBJEKT]
+Einsatzmittel; [EINSATZMITTEL] 
+Latitude; [GPS_LAT]
+Longitude; [GPS_LONG]
+Alarmdatum; [ALARMDATUM]
+*** Datum/Zeit: 
 
 # Aufbau, um Adresse in Karte anzuzeigen
-Um die Adresse der Alamierung in der Karte anzuzeigen müssen die folgenden Keywords in der genannten Reihenfolge vorhanden sein.
+Die Adresse auf der Karte wird mithilfe des Breiten- und Längengrades angezeigt. Diese müssen als Keyword wie folgt vorkommen:
+
+Latitude; 
+Longitude; 
+
+Falls diese Werte nicht vorhanden sind wird versucht, die Karte anhand der Adresse zu aktualisieren. Dau müssen die folgenden Keywords in der genannten Reihenfolge vorhanden sein.
 Es dürfen dabei andere Keywords dazwischen vorkommen.
 
 Strasse; ...

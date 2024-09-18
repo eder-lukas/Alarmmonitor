@@ -3,7 +3,8 @@ KEYWORD_HAUSNUMMER='Hausnummer'
 KEYWORD_PLZ='PLZ'
 KEYWORD_ORT='Ort'
 KEYWORD_ADRESSE='Adresse'
-KEYWORD_ADDSESS_WITHOUT_CITY='address_without_city'
+KEYWORD_LATITUDE='Latitude'
+KEYWORD_LONGITUDE='Longitude'
 KEYWORD_SEPARATOR=';'
 
 class Mail:
@@ -67,24 +68,36 @@ class Mail:
         if postal_code:
             address = address + postal_code + " "
             del content[KEYWORD_PLZ]
-
-        # insert address without city for map parsing
-        content = self._insert_keyword_and_value_in_pos(content, KEYWORD_ADDSESS_WITHOUT_CITY, address, 0)
-
         if city:
             address = address + city
             del content[KEYWORD_ORT]
 
-        content = self._insert_keyword_and_value_in_pos(content, KEYWORD_ADRESSE, address, 3)
+        content = self._insert_address_in_pos(content, address, 3)
         return content
 
-    def _insert_keyword_and_value_in_pos(self, content: dict, keyword, value_to_insert, pos) -> dict:
+    def _insert_address_in_pos(self, content: dict, address, pos) -> dict:
         res = {}
         i = 0
         for key, value in content.items():
             if i == pos:
-                res[keyword] = value_to_insert
+                res[KEYWORD_ADRESSE] = address
                 i += 1
             res[key] = value
             i += 1
         return res
+    
+    """
+    Returns the content dict without latitude and longitude and the latitude and longitude in the original (str) fromat
+    """
+def extract_coordinates_from_content(content: dict):
+    res_dict = {}
+    latitude = ""
+    longitude = ""
+    for key, value in content.items():
+        if key == KEYWORD_LATITUDE:
+            latitude = value
+        elif key == KEYWORD_LONGITUDE:
+            longitude = value
+        else:
+            res_dict.update({key : value})
+    return res_dict, latitude, longitude

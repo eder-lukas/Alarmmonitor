@@ -29,7 +29,7 @@ def main():
                     app.update_content(content)
 
         if (gui_thread.is_alive()): # when gui is closed, kill the whole program
-            time.sleep(1)
+            time.sleep(10)
         else:
             print("Programm wird beendet, weil GUI beendet wurde am " + datetime.now().strftime("%d.%m.%Y um %H:%M:%S"))
             exit(1)
