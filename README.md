@@ -1,50 +1,93 @@
-# Alarmierungsmail Aufbau
+# Info
+
+Dieses Alarmmonitorprogramm ist noch in der Entwicklung und nur ein Freizeitprojekt. Eventuelle Fehlfunktionen sind also möglich. 
+Es sind noch nicht sehr viele Features vorhanden.
+
+Neue Funktionen werden von Zeit zu Zeit auf Github veröffentlicht. Diese müssen momentan noch manuell aktualisiert werden. Wie dies funktioniert wird bei den Hinweisen am Ende erklärt.
+
+
+## Geplante Features
+
+
+
+# Installationsvorraussetzungen
+
+
+## Alarmierungsmail nach folgendem Aufbau
+
+Dieses Programm zeigt Alarmierungen an, die auf einer Mail Adresse im Textformat eingehen.
+
 Die Alarmierungsmail muss wie Folgt aufgebaut sein:
 
-Keyword; Inhalt
-Keyword; Inhalt
+Keyword; Inhalt\
+Keyword; Inhalt\
 ...
 
 Dieser Aufbau wird dann in einer tabellarischen Übersicht dargestellt.
-Beispielaufbau für Poweralarm:
 
-Schlagwort; [SCHLAGWORT]
-Stichwort; [STICHWORT]
-Bemerkung; [BEMERKUNG]
-Strasse; [STRASSE] 
-Hausnummer; [HAUSNUMMER] 
-PLZ; [PLZ]
-Ort; [ORT]
-Ortsteil; [ORTSTEIL]
-Abschnitt; [ABSCHNITT]
-Mitteiler; [MITTEILER]
-Mitteiler Kontakt; [MITTEILER_KONTAKT]
-Objekt; [OBJEKT]
-Einsatzmittel; [EINSATZMITTEL] 
-Latitude; [GPS_LAT]
-Longitude; [GPS_LONG]
-Alarmdatum; [ALARMDATUM]
-*** Datum/Zeit: 
 
-# Aufbau, um Adresse in Karte anzuzeigen
+## Alarmmail aus Poweralarm 
+
+Eine solche Mail kann zum Beispiel aus PowerAlarm erzeugt werden, sofern die eMID Schnittstelle verwendet wird.\
+Es wird eine E-Mail Adresse benötigt, um die Alarme zu empfangen. Ich empfehle, eine separate Mail Adresse zu verwenden, die nur für den Alarmmonitor genutzt wird.\
+Anschließend wird in Poweralarm ein Benutzer angelegt, welcher als Nummer die Mail-Adresse hinterlegt hat und als Typ MAIL.\
+![alt text](Images/Poweralarm_Kontakt.png)
+Als nächstes wird eine Gruppe für den Alarmmonitor erstellt. Der soeben erstellte Benutzer wird dieser Gruppe zugewiesen.\
+Zu guter letzt wird noch ein Alarmgeber benötigt. Ihm wird die gerade erstellte Gruppe zu gewiesen und ein Text-Template, wie z.B. folgendes:
+
+Schlagwort; [SCHLAGWORT]\
+Stichwort; [STICHWORT]\
+Bemerkung; [BEMERKUNG]\
+Strasse; [STRASSE]\
+Hausnummer; [HAUSNUMMER]\
+PLZ; [PLZ]\
+Ort; [ORT]\
+Ortsteil; [ORTSTEIL]\
+Abschnitt; [ABSCHNITT]\
+Mitteiler; [MITTEILER]\
+Mitteiler Kontakt; [MITTEILER_KONTAKT]\
+Objekt; [OBJEKT]\
+Einsatzmittel; [EINSATZMITTEL]\
+Latitude; [GPS_LAT]\
+Longitude; [GPS_LONG]\
+Alarmdatum; [ALARMDATUM]\
+*** Datum/Zeit:
+
+Nun sollte bei jedem Einsatz eine Mail mit den oben genannten Details an die angegebene E-Mail Adresse versendet werden.
+
+
+## Anforderungen an den Aufbau der Alarmmail
+
 Die Adresse auf der Karte wird mithilfe des Breiten- und Längengrades angezeigt. Diese müssen als Keyword wie folgt vorkommen:
 
-Latitude; 
-Longitude; 
+Latitude;\
+Longitude;
 
-Falls diese Werte nicht vorhanden sind wird versucht, die Karte anhand der Adresse zu aktualisieren. Dau müssen die folgenden Keywords in der genannten Reihenfolge vorhanden sein.
-Es dürfen dabei andere Keywords dazwischen vorkommen.
+Die Werte für Breitengrad und Längengrad werden im Programm verarbeitet und nicht in der Tabellarischen Ansicht des Alarmmonitors mit dargestellt.\
+Falls die Koordinatetn nicht vorhanden sind, wird versucht die Karte anhand der Adresse zu aktualisieren. Dazu müssen die folgenden Keywords in der genannten Reihenfolge vorhanden sein.\
+Es dürfen dabei andere Keywords dazwischen vorkommen. Die Reihenfolge ist jedoch zu beachten.
 
-Strasse; ...
-Hausnummer; ...
-PLZ; ...
+Strasse; ...\
+Hausnummer; ...\
+PLZ; ...\
 Ort; ...
 
-Wenn dieser Aufbau bei Ihnen nicht zutrifft, kann die Verarbeitung der Inhalts zur Adresse in der Datei mail.py -> get_address_from_content angepasst werden.
+Um Platz auf der Anzeige zu sparen, wird die Adresse zusammengefasst angezeigt, wie z.B. Musterstraße 45a 55555 Musterstadt\
+Wenn Sie den Aufbau anpassen möchten, kann die Verarbeitung der Inhalts zur Adresse in der Datei mail.py -> get_address_from_content angepasst werden.\
 Falls die Adresse nicht aufgelöst werden kann, ändert sich an der Karte nichts. Der Text wird dennoch angezeigt.
 
-# Alarmmonitor Environment
-Es muss eine alarmmonitor.env Datei im Root-Verzeichnis geben (selbe Ebene wie main.py).
+
+# Raspberry Pi setup
+
+Im Terminal:
+> sudo apt-get update && sudo apt-get upgrade
+
+Klone das Git-Repo, oder lade die ZIP-Datei herunter und entpacke diese in einen Ordner deiner Wahl. Den Pfad zu dem Ordner werden wir später noch benötigen.
+
+
+## Alarmmonitor Environment
+
+Es muss eine alarmmonitor.env Datei im Root-Verzeichnis geben (selbe Ebene wie main.py).\
 Die Datei wird nicht über das Git-Repo mit verteilt und muss somit manuell nach dem folgenden Muster erstellt und angepasst werden.
 
 > EMAIL_ADDRESS=deine.email@beispiel.com
@@ -54,73 +97,102 @@ Die Datei wird nicht über das Git-Repo mit verteilt und muss somit manuell nach
 > FILTER_EMAIL_SENDER=@beispiel2.com
 > FILTER_EMAIL_SUBJECT=Alarmierung
 
-Filter Werte können auch leer sein. Dafür einfach neben dem '=' nichts ausfüllen
-Die Filter-Werte müssen nicht genau mit den tatsächlichen Werten übereinstimmen. 
-Es wird also bei einem Filter für @beispiel2.com eine Mail von asdf@beispiel2.com und auch eine Mail von asdf@beispiel2.comm akzeptiert. Analog ist das Verfahren mit dem Betreff.
+Die Filterwerte werden benötigt, um nur die Mails zu verarbeiten, die auch eine Alarmierung beinhalten. Auch wenn eine separate Mail nur für den Alarmmonitor angelegt wurde, kommen Werbe- oder Spammails, welche nicht verarbeitet werden sollen.
 
+Der Filter "FILTER_EMAIL_SENDER" muss mit einem Wert ausgefüllt werden, welcher in der Mail-Adresse des Alarmabsenders enthalten ist. Für Poweralarm als Alarmabsender kann z.B. @fitt-gmbh.de verwendet werden. Dieser Wert kann auch beliebig angepasst werden, um z.B. manuelle Alarmmails als Test zu schreiben und zu verarbeiten.\
+Der Wert "FILTER_EMAIL_SUBJECT" ist mit einem Text auszufüllen, welcher im Betreff der Alarmmail zu finden ist. Bei Poweralarm z.B. Alarm.
 
-# Raspberry setup
-Im Terminal: 
-sudo apt-get update && sudo apt-get upgrade
+Die Filterwerte sind so konzipiert, dass der angegebene Wert nur in der Mail bzw. dem Betreff vorkommen muss. Es muss keine exakte Übereinstimmung sein. So wird z.B. mit dem Filterwert "Alarm" auch das Wort "Alarmierung" abgedeckt. Bzw. der Filter @beispiel.com deckt sowohl test@beispiel.com ab, als auch hallo@beispiel.com.
 
-Klone das Git-Repo
+Alle Filter Werte können auch leer sein. Dafür einfach neben dem '=' nichts ausfüllen.
 
-Lege alarmmonitor.env in dem Ordner an und befülle die Datei (siehe oben)
 
 ## Bildschirmschoner deaktivieren:
+
 Im Terminal mit 
-sudo nano /etc/xdg/lxsession/LXDE-pi/autostart
+> sudo nano /etc/xdg/lxsession/LXDE-pi/autostart
+
 Datei /etc/xdg/lxsession/LXDE-pi/autostart öffenen und folgende Zeilen hinzufügen:
 
-@xset s off
-@xset -dpms
-@xset s noblank
+> @xset s off
+> @xset -dpms
+> @xset s noblank
 
 
 ## Virtuelle Umgebung erstellen: 
+
+Hinweis: Der root folder des Alarmmonitors ist der Ordner, in dem die Datei main.py zu finden ist. 
+
 Im Terminal:
-cd /root-folder-of-alarmmonitor
-python -m venv venv
-source venv/bin/activate
-pip install python-dotenv tkintermapview
-python main.py
+> cd /root-folder-of-alarmmonitor
+> python -m venv venv
+> source venv/bin/activate
+> pip install python-dotenv tkintermapview geopy
+> python main.py
 
 Anwendung sollte gestartet haben
 -> kann wieder beendet werden
 
-Im Terminal:
-deactivate
+Im selben Terminal (ansonsten wieder zum richtigen Pfad wechseln mit cd ...):
+> deactivate
+
 
 ## Autostart für Alarmmonitor
+
+Nun wird das Alarmmonitor Programm so eingerichtet, dass es automatisch beim starten des Raspberry geöffnet wird (z.B. nach einem Stromausfall).
+
 Im Terminal: 
-Touch ~/Desktop/Alarmmonitor.sh
-chmod +x Alarmmonitor.sh
+> Touch ~/Desktop/Alarmmonitor.sh
+> chmod +x Alarmmonitor.sh
 
-->Datei bearbeiten:  
-#!/bin/bash
+-> erstellte Datei Alarmmonitor.sh bearbeiten und folgenden Inhalt einfügen. Dabei müssen die Platzhalter "Usermane" und "Path-to-Alarmmonitor" ersetzt werden.
 
-sleep 15
-
-LOGFILE=/home/FFSinning/Desktop/alarmmonitor.log
-echo "Cronjob started at $(date)" >> LOGFILE
-
-export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
-export DISPLAY=:0
-
-xhost +SI:localuser:FFSinning (eventuell nicht benötigt)
-
-source /Path-to-Alarmmonitor/venv/bin/activate >> $LOGFILE 2>&1
-python -u /Path-to-Alarmmonitor/main.py >> $LOGFILE 2>&1
-deactivate
-echo "Cronjob ended at $(date)" >> $LOGFILE
-
+> #!/bin/bash
+> 
+> sleep 15
+> 
+> LOGFILE=/home/Usermane/Desktop/alarmmonitor.log
+> echo "Cronjob started at $(date)" >> LOGFILE
+> 
+> export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+> export DISPLAY=:0
+> 
+> xhost +SI:localuser:Usermane (eventuell nicht benötigt)
+> 
+> source /Path-to-Alarmmonitor/venv/bin/activate >> $LOGFILE 2>&1
+> python -u /Path-to-Alarmmonitor/main.py >> $LOGFILE 2>&1
+> deactivate
+> echo "Cronjob ended at $(date)" >> $LOGFILE
 
 Im Terminal:
-crontab -e
+> crontab -e
 
 Zeile hinzufügen:
-
-@reboot ~/Desktop/Alarmmonitor.sh &
+> @reboot ~/Desktop/Alarmmonitor.sh &
 
 
 Fertig :)
+
+
+# Info
+
+## Logdatei
+
+Der Alarmmonitor legt eine sogenannte Logdatei an, in der einige Ereignisse dokumentiert werden, wie z.B. das empfangen einer neuen Mail, oder das verlieren der Internetverbindung. Diese Logdatei wird noch nicht automatisch geleert. Es empfiehlt sich diese von Zeit zu Zeit zu kontrollieren und ggf. zu löschen, oder alte Inhalte aus der Datei zu löschen.
+
+
+## Mailempfang
+
+Vom Mailserver werden alle Mails verarbeitet, die als ungelesen markiert sind. Diese werden anschließend als gelesen markiert. Es kann also zum testen eine schon vorhandene Mail einfach wieder als ungelesen markiert werden.
+
+
+## Anwendung beenden
+
+Da die Anwendung im Vollbildmodus läuft, ist es momentan noch nicht mit einem Mausklick möglich, diese zu minimieren oder zu schließen. 
+Es kann allerdings die Windowstaste gedrückt werden, dann z.B. Terminal eingegeben werden und dieses geöffnet werden. Anschließend ist die Taskleiste zu sehen und mit einem Rechtsklick auf das Alarmmonitor Fenster kann dieses Minimiert oder geschlossen werden. Das Terminal kann anschließend auch wieder geschlossen werden.
+
+
+## Updates
+
+Für Updates sollte die Anwendung geschlossen sein.
+Updates werden noch nicht automatisch installiert. Um dies manuell durchzuführen, können Sie die aktualisierten Dateien aus Github herunterladen und anschließend die vorhandenen Dateien durch die neuen ersetzten. Falls Sie mit git vertraut sind, können Sie einfach einen git pull durchführen.

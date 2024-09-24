@@ -1,3 +1,5 @@
+# All libraries from here should be mentioned in the README.md chapter "Virtuelle Umgebung erstellen"
+
 python-dotenv
 tkintermapview
 geopy
