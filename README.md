@@ -3,11 +3,7 @@
 Dieses Alarmmonitorprogramm ist noch in der Entwicklung und nur ein Freizeitprojekt. Eventuelle Fehlfunktionen sind also möglich. 
 Es sind noch nicht sehr viele Features vorhanden.
 
-Neue Funktionen werden von Zeit zu Zeit auf Github veröffentlicht. Diese müssen momentan noch manuell aktualisiert werden. Wie dies funktioniert wird bei den Hinweisen am Ende erklärt.
-
-
-## Geplante Features
-
+Neue Funktionen werden von Zeit zu Zeit auf Github veröffentlicht. Diese müssen momentan noch manuell aktualisiert werden. Wie dies funktioniert wird bei den Hinweisen am Ende erklärt. Geplante Funktionen sind ebenfalls am Ende erwähnt.
 
 
 # Installationsvorraussetzungen
@@ -196,3 +192,17 @@ Es kann allerdings die Windowstaste gedrückt werden, dann z.B. Terminal eingege
 
 Für Updates sollte die Anwendung geschlossen sein.
 Updates werden noch nicht automatisch installiert. Um dies manuell durchzuführen, können Sie die aktualisierten Dateien aus Github herunterladen und anschließend die vorhandenen Dateien durch die neuen ersetzten. Falls Sie mit git vertraut sind, können Sie einfach einen git pull durchführen.
+
+
+## Geplante Features
+
+Hier einige relevante Features, die für die Zukunft geplant sind:
+
+- Anzeige auf Bildschirm, wenn Mails nicht aberufen werden können
+- Hydranten auf der Karte einzeichnen
+- Automatische Update Funktion
+- Tabelle mit angezeigten Daten scrollbar machen
+- Anzeige eines minimieren und schließen Buttons, wenn die Maus in die rechte Obere Ecke bewegt wird
+- Standby Anzeige mit Uhrzeit, Wetter etc.
+
+Weitere geplante Features sind in den Issues in Github zu finden
