@@ -15,9 +15,11 @@ Dieses Programm zeigt Alarmierungen an, die auf einer Mail Adresse im Textformat
 
 Die Alarmierungsmail muss wie Folgt aufgebaut sein:
 
-Keyword; Inhalt\
-Keyword; Inhalt\
+```
+Keyword; Inhalt
+Keyword; Inhalt
 ...
+```
 
 Dieser Aufbau wird dann in einer tabellarischen Übersicht dargestellt.
 
@@ -26,28 +28,32 @@ Dieser Aufbau wird dann in einer tabellarischen Übersicht dargestellt.
 
 Eine solche Mail kann zum Beispiel aus PowerAlarm erzeugt werden, sofern die eMID Schnittstelle verwendet wird.\
 Es wird eine E-Mail Adresse benötigt, um die Alarme zu empfangen. Ich empfehle, eine separate Mail Adresse zu verwenden, die nur für den Alarmmonitor genutzt wird.\
-Anschließend wird in Poweralarm ein Benutzer angelegt, welcher als Nummer die Mail-Adresse hinterlegt hat und als Typ MAIL.\
+Anschließend wird in Poweralarm ein Benutzer angelegt, welcher als Nummer die Mail-Adresse hinterlegt hat und als Typ MAIL.
+
 ![alt text](Images/Poweralarm_Kontakt.png)
+
 Als nächstes wird eine Gruppe für den Alarmmonitor erstellt. Der soeben erstellte Benutzer wird dieser Gruppe zugewiesen.\
 Zu guter letzt wird noch ein Alarmgeber benötigt. Ihm wird die gerade erstellte Gruppe zu gewiesen und ein Text-Template, wie z.B. folgendes:
 
-Schlagwort; [SCHLAGWORT]\
-Stichwort; [STICHWORT]\
-Bemerkung; [BEMERKUNG]\
-Strasse; [STRASSE]\
-Hausnummer; [HAUSNUMMER]\
-PLZ; [PLZ]\
-Ort; [ORT]\
-Ortsteil; [ORTSTEIL]\
-Abschnitt; [ABSCHNITT]\
-Mitteiler; [MITTEILER]\
-Mitteiler Kontakt; [MITTEILER_KONTAKT]\
-Objekt; [OBJEKT]\
-Einsatzmittel; [EINSATZMITTEL]\
-Latitude; [GPS_LAT]\
-Longitude; [GPS_LONG]\
-Alarmdatum; [ALARMDATUM]\
+```
+Schlagwort; [SCHLAGWORT]
+Stichwort; [STICHWORT]
+Bemerkung; [BEMERKUNG]
+Strasse; [STRASSE]
+Hausnummer; [HAUSNUMMER]
+PLZ; [PLZ]
+Ort; [ORT]
+Ortsteil; [ORTSTEIL]
+Abschnitt; [ABSCHNITT]
+Mitteiler; [MITTEILER]
+Mitteiler Kontakt; [MITTEILER_KONTAKT]
+Objekt; [OBJEKT]
+Einsatzmittel; [EINSATZMITTEL]
+Latitude; [GPS_LAT]
+Longitude; [GPS_LONG]
+Alarmdatum; [ALARMDATUM]
 *** Datum/Zeit:
+```
 
 Nun sollte bei jedem Einsatz eine Mail mit den oben genannten Details an die angegebene E-Mail Adresse versendet werden.
 
@@ -56,17 +62,21 @@ Nun sollte bei jedem Einsatz eine Mail mit den oben genannten Details an die ang
 
 Die Adresse auf der Karte wird mithilfe des Breiten- und Längengrades angezeigt. Diese müssen als Keyword wie folgt vorkommen:
 
-Latitude;\
+```
+Latitude;
 Longitude;
+```
 
 Die Werte für Breitengrad und Längengrad werden im Programm verarbeitet und nicht in der Tabellarischen Ansicht des Alarmmonitors mit dargestellt.\
 Falls die Koordinatetn nicht vorhanden sind, wird versucht die Karte anhand der Adresse zu aktualisieren. Dazu müssen die folgenden Keywords in der genannten Reihenfolge vorhanden sein.\
 Es dürfen dabei andere Keywords dazwischen vorkommen. Die Reihenfolge ist jedoch zu beachten.
 
-Strasse; ...\
-Hausnummer; ...\
-PLZ; ...\
+```
+Strasse; ...
+Hausnummer; ...
+PLZ; ...
 Ort; ...
+```
 
 Um Platz auf der Anzeige zu sparen, wird die Adresse zusammengefasst angezeigt, wie z.B. Musterstraße 45a 55555 Musterstadt\
 Wenn Sie den Aufbau anpassen möchten, kann die Verarbeitung der Inhalts zur Adresse in der Datei mail.py -> get_address_from_content angepasst werden.\
@@ -76,7 +86,10 @@ Falls die Adresse nicht aufgelöst werden kann, ändert sich an der Karte nichts
 # Raspberry Pi setup
 
 Im Terminal:
-> sudo apt-get update && sudo apt-get upgrade
+
+```bash
+sudo apt-get update && sudo apt-get upgrade
+```
 
 Klone das Git-Repo, oder lade die ZIP-Datei herunter und entpacke diese in einen Ordner deiner Wahl. Den Pfad zu dem Ordner werden wir später noch benötigen.
 
@@ -86,12 +99,14 @@ Klone das Git-Repo, oder lade die ZIP-Datei herunter und entpacke diese in einen
 Es muss eine alarmmonitor.env Datei im Root-Verzeichnis geben (selbe Ebene wie main.py).\
 Die Datei wird nicht über das Git-Repo mit verteilt und muss somit manuell nach dem folgenden Muster erstellt und angepasst werden.
 
-> EMAIL_ADDRESS=deine.email@beispiel.com
-> EMAIL_PASSWORD=deinpasswort
-> IMAP_SERVER_ADDRESS=imap.beispiel.net
-> 
-> FILTER_EMAIL_SENDER=@beispiel2.com
-> FILTER_EMAIL_SUBJECT=Alarmierung
+```
+EMAIL_ADDRESS=deine.email@beispiel.com
+EMAIL_PASSWORD=deinpasswort
+IMAP_SERVER_ADDRESS=imap.beispiel.net
+
+FILTER_EMAIL_SENDER=@beispiel2.com
+FILTER_EMAIL_SUBJECT=Alarmierung
+```
 
 Die Filterwerte werden benötigt, um nur die Mails zu verarbeiten, die auch eine Alarmierung beinhalten. Auch wenn eine separate Mail nur für den Alarmmonitor angelegt wurde, kommen Werbe- oder Spammails, welche nicht verarbeitet werden sollen.
 
@@ -106,13 +121,17 @@ Alle Filter Werte können auch leer sein. Dafür einfach neben dem '=' nichts au
 ## Bildschirmschoner deaktivieren:
 
 Im Terminal mit 
-> sudo nano /etc/xdg/lxsession/LXDE-pi/autostart
+```bash
+sudo nano /etc/xdg/lxsession/LXDE-pi/autostart
+```
 
 Datei /etc/xdg/lxsession/LXDE-pi/autostart öffenen und folgende Zeilen hinzufügen:
 
-> @xset s off
-> @xset -dpms
-> @xset s noblank
+```
+@xset s off
+@xset -dpms
+@xset s noblank
+```
 
 
 ## Virtuelle Umgebung erstellen: 
@@ -120,52 +139,62 @@ Datei /etc/xdg/lxsession/LXDE-pi/autostart öffenen und folgende Zeilen hinzufü
 Hinweis: Der root folder des Alarmmonitors ist der Ordner, in dem die Datei main.py zu finden ist. 
 
 Im Terminal:
-> cd /root-folder-of-alarmmonitor
-> python -m venv venv
-> source venv/bin/activate
-> pip install python-dotenv tkintermapview geopy
-> python main.py
+```bash
+cd /root-folder-of-alarmmonitor
+python -m venv venv
+source venv/bin/activate
+pip install python-dotenv tkintermapview geopy
+python main.py
+```
 
 Anwendung sollte gestartet haben
 -> kann wieder beendet werden
 
 Im selben Terminal (ansonsten wieder zum richtigen Pfad wechseln mit cd ...):
-> deactivate
-
+```bash
+deactivate
+```
 
 ## Autostart für Alarmmonitor
 
 Nun wird das Alarmmonitor Programm so eingerichtet, dass es automatisch beim starten des Raspberry geöffnet wird (z.B. nach einem Stromausfall).
 
 Im Terminal: 
-> Touch ~/Desktop/Alarmmonitor.sh
-> chmod +x Alarmmonitor.sh
+```bash
+Touch ~/Desktop/Alarmmonitor.sh
+chmod +x Alarmmonitor.sh
+```
 
 -> erstellte Datei Alarmmonitor.sh bearbeiten und folgenden Inhalt einfügen. Dabei müssen die Platzhalter "Usermane" und "Path-to-Alarmmonitor" ersetzt werden.
 
-> #!/bin/bash
-> 
-> sleep 15
-> 
-> LOGFILE=/home/Usermane/Desktop/alarmmonitor.log
-> echo "Cronjob started at $(date)" >> LOGFILE
-> 
-> export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
-> export DISPLAY=:0
-> 
-> xhost +SI:localuser:Usermane (eventuell nicht benötigt)
-> 
-> source /Path-to-Alarmmonitor/venv/bin/activate >> $LOGFILE 2>&1
-> python -u /Path-to-Alarmmonitor/main.py >> $LOGFILE 2>&1
-> deactivate
-> echo "Cronjob ended at $(date)" >> $LOGFILE
+```
+#!/bin/bash
+
+sleep 15
+
+LOGFILE=/home/Usermane/Desktop/alarmmonitor.log
+echo "Cronjob started at $(date)" >> LOGFILE
+
+export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+export DISPLAY=:0
+
+xhost +SI:localuser:Usermane (eventuell nicht benötigt)
+
+source /Path-to-Alarmmonitor/venv/bin/activate >> $LOGFILE 2>&1
+python -u /Path-to-Alarmmonitor/main.py >> $LOGFILE 2>&1
+deactivate
+echo "Cronjob ended at $(date)" >> $LOGFILE
+```
 
 Im Terminal:
-> crontab -e
+```bash
+crontab -e
+```
 
 Zeile hinzufügen:
-> @reboot ~/Desktop/Alarmmonitor.sh &
-
+```
+@reboot ~/Desktop/Alarmmonitor.sh &
+```
 
 Fertig :)
 
