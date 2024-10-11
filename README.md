@@ -116,6 +116,8 @@ DEFAULT_LATITUDE=48.688687
 DEFAULT_LONGITUDE=11.109092
 ```
 
+DEFAULT_LATITUDE und -LONGITUDE sind die Koordinaten, welche standardmäßig auf der Karte angezeigt werden, falls keine Alarmierung vorliegt. Hier können z.B. die Koordinaten des eigenen Feuerwehrhauses oder ähnliches verwendet werden. Koordinaten können z.B. [hier](www.koordinaten-umrechner.de) aus der Adresse berechnet werden. 
+
 Die Filterwerte werden benötigt, um nur die Mails zu verarbeiten, die auch eine Alarmierung beinhalten. Auch wenn eine separate Mail nur für den Alarmmonitor angelegt wurde, kommen Werbe- oder Spammails, welche nicht verarbeitet werden sollen.
 
 Der Filter "FILTER_EMAIL_SENDER" muss mit einem Wert ausgefüllt werden, welcher in der Mail-Adresse des Alarmabsenders enthalten ist. Für Poweralarm als Alarmabsender kann z.B. @fitt-gmbh.de verwendet werden. Dieser Wert kann auch beliebig angepasst werden, um z.B. manuelle Alarmmails als Test zu schreiben und zu verarbeiten.\
