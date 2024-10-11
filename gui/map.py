@@ -1,10 +1,11 @@
+from load_env import load_default_latitude, load_default_longitude
 from tkinter import ttk
 import tkintermapview
 from geopy.geocoders import Nominatim
 import re
 
-DEFAULT_LATITUDE=48.688687
-DEFAULT_LONGITUDE=11.109092
+DEFAULT_LATITUDE=load_default_latitude()
+DEFAULT_LONGITUDE=load_default_longitude()
 
 class Map:
     def __init__(self, parent_widget: ttk.Frame) -> None:

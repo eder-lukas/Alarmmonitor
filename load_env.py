@@ -24,3 +24,10 @@ def load_subject_filter():
     load_dotenv(current_dir + os.path.sep + "alarmmonitor.env")
     return os.getenv('FILTER_EMAIL_SUBJECT')
 
+def load_default_latitude():
+    load_dotenv(current_dir + os.path.sep + "alarmmonitor.env")
+    return os.getenv('DEFAULT_LATITUDE')
+
+def load_default_longitude():
+    load_dotenv(current_dir + os.path.sep + "alarmmonitor.env")
+    return os.getenv('DEFAULT_LONGITUDE')

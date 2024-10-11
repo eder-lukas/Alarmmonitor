@@ -8,6 +8,12 @@ Neue Funktionen werden von Zeit zu Zeit auf Github veröffentlicht. Diese müsse
 
 # Installationsvorraussetzungen
 
+## E-Mail Adresse zum Empfang von E-Mails
+
+Es wird eine E-Mail Adresse benötigt, um die Alarme zu empfangen. Ich empfehle, eine separate Mail Adresse zu verwenden, die nur für den Alarmmonitor genutzt wird.\
+Googlemail bzw. gmail Postfächer funktionieren leider momentan noch nicht. Verwenden Sie stattdessen einen anderen Anbieter, wie z.B. gmx.\
+Im E-Mail Postfach muss in den Einstellungen die Option aktiviert sein, dass die E-Mails über IMAP abgerufen werden dürfen.
+
 
 ## Alarmierungsmail nach folgendem Aufbau
 
@@ -26,9 +32,8 @@ Dieser Aufbau wird dann in einer tabellarischen Übersicht dargestellt.
 
 ## Alarmmail aus Poweralarm 
 
-Eine solche Mail kann zum Beispiel aus PowerAlarm erzeugt werden, sofern die eMID Schnittstelle verwendet wird.\
-Es wird eine E-Mail Adresse benötigt, um die Alarme zu empfangen. Ich empfehle, eine separate Mail Adresse zu verwenden, die nur für den Alarmmonitor genutzt wird.\
-Anschließend wird in Poweralarm ein Benutzer angelegt, welcher als Nummer die Mail-Adresse hinterlegt hat und als Typ MAIL.
+Eine Alarmierungsmail Mail kann zum Beispiel aus PowerAlarm erzeugt werden, sofern die eMID Schnittstelle verwendet wird.\
+Nun wird in Poweralarm ein Benutzer angelegt, welcher als Nummer die Mail-Adresse hinterlegt hat und als Typ MAIL.
 
 ![alt text](Images/Poweralarm_Kontakt.png)
 
@@ -106,6 +111,9 @@ IMAP_SERVER_ADDRESS=imap.beispiel.net
 
 FILTER_EMAIL_SENDER=@beispiel2.com
 FILTER_EMAIL_SUBJECT=Alarmierung
+
+DEFAULT_LATITUDE=48.688687
+DEFAULT_LONGITUDE=11.109092
 ```
 
 Die Filterwerte werden benötigt, um nur die Mails zu verarbeiten, die auch eine Alarmierung beinhalten. Auch wenn eine separate Mail nur für den Alarmmonitor angelegt wurde, kommen Werbe- oder Spammails, welche nicht verarbeitet werden sollen.
@@ -165,20 +173,18 @@ Touch ~/Desktop/Alarmmonitor.sh
 chmod +x Alarmmonitor.sh
 ```
 
--> erstellte Datei Alarmmonitor.sh bearbeiten und folgenden Inhalt einfügen. Dabei müssen die Platzhalter "Usermane" und "Path-to-Alarmmonitor" ersetzt werden.
+-> erstellte Datei Alarmmonitor.sh bearbeiten und folgenden Inhalt einfügen. Dabei müssen die zwei Platzhalter "Usermane" und die zwei Platzhalter "Path-to-Alarmmonitor" ersetzt werden.
 
 ```
 #!/bin/bash
 
 sleep 15
 
-LOGFILE=/home/Usermane/Desktop/alarmmonitor.log
+LOGFILE=/home/*Usermane*/Desktop/alarmmonitor.log
 echo "Cronjob started at $(date)" >> LOGFILE
 
 export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
 export DISPLAY=:0
-
-xhost +SI:localuser:Usermane (eventuell nicht benötigt)
 
 source /Path-to-Alarmmonitor/venv/bin/activate >> $LOGFILE 2>&1
 python -u /Path-to-Alarmmonitor/main.py >> $LOGFILE 2>&1
