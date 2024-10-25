@@ -2,7 +2,6 @@ from mail_client.mail import Mail
 from mail_client.get_mails import get_mails_from_server
 from load_env import load_sender_filter, load_subject_filter
 from gui.app import App
-from datetime import datetime
 import time
 import threading
 from logger import logger
@@ -29,7 +28,7 @@ def main():
                     app.update_content(content)
 
         if (gui_thread.is_alive()): # when gui is closed, kill the whole program
-            time.sleep(1)
+            time.sleep(10)
         else:
             logger.info("Programm wird beendet, weil GUI beendet wurde.")
             exit(1)

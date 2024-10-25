@@ -14,7 +14,6 @@ def create_logger(logging_level = logging.INFO):
 
     logger.addHandler(console_handler)
 
-    print("hier")
     return logger
 
 logger: logging.Logger = create_logger(logging.INFO)

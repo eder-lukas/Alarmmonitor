@@ -2,8 +2,7 @@ from .map import Map
 from mail_client.mail import KEYWORD_ADRESSE, extract_coordinates_from_content
 import tkinter as tk
 from tkinter import ttk
-from tkinter import Button
-from datetime import datetime
+from tkinter import Button, Frame
 from logger import logger
 
 class App:
@@ -15,6 +14,7 @@ class App:
         self.map = None
         self.line_widgets = []
         self.reset_button = None
+        self.close_button = None
 
 
     def start_application(self):
@@ -41,11 +41,19 @@ class App:
 
         self.map = Map(self.right_block)
 
-        # Add button in the right buttom corner of the right_block
-        self.reset_button = Button(self.right_block, text="reset")
-        self.reset_button.place(relx=1.0, rely=0.0, anchor='ne', x=-10, y=10) # 10 pixels padding from right and bottom
+        # Create a frame for the buttons and position it in the top right corner
+        self.button_frame = Frame(self.right_block)
+        self.button_frame.place(relx=1.0, rely=0.0, anchor='ne')
+
+        # Add reset button inside the button frame
+        self.reset_button = Button(self.button_frame, text="reset", bg="white", fg="black", borderwidth=0)
+        self.reset_button.pack(side="left", padx=(0, 5))
         self.reset_button.config(command=self.reset_view)
 
+        # Add close button inside the button frame
+        self.close_button = Button(self.button_frame, text="×", bg="red", fg="white", activebackground="dark red", activeforeground="white", borderwidth=0)
+        self.close_button.pack(side="left")
+        self.close_button.config(command=self.exit)
 
         self.window.mainloop()
 
@@ -100,3 +108,8 @@ class App:
         wrap_len = self.window.winfo_width() - self.right_block.winfo_width() - key_widgets[0].winfo_width()
         for label in value_widgets:
             label.configure(wraplength=wrap_len)
+
+
+    def exit(self):
+        logger.info("GUI über Button geschlossen")
+        self.window.destroy()
