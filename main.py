@@ -5,10 +5,10 @@ from gui.app import App
 from datetime import datetime
 import time
 import threading
+from logger import logger
 
 gui_thread = None
 app = None
-
 
 def main():
     # Start Gui Thread
@@ -29,20 +29,18 @@ def main():
                     app.update_content(content)
 
         if (gui_thread.is_alive()): # when gui is closed, kill the whole program
-            time.sleep(10)
+            time.sleep(1)
         else:
-            print("Programm wird beendet, weil GUI beendet wurde am " + datetime.now().strftime("%d.%m.%Y um %H:%M:%S"))
+            logger.info("Programm wird beendet, weil GUI beendet wurde.")
             exit(1)
 
 
 def print_mail_info(mail):
-    print()
-    print("-----------------------------------")
-    print("Neue Mail empfangen am " + datetime.now().strftime("%d.%m.%Y um %H:%M:%S"))
-    print("-----------------------------------")
-    print("Betreff:", mail.subject)
-    print("-----------------------------------")
-    print()
+    logger.info("-----------------------------------")
+    logger.info("Neue Mail empfangen")
+    logger.info("-----------------------------------")
+    logger.info(f"Betreff: {mail.subject}")
+    logger.info("-----------------------------------")
 
 
 main()

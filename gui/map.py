@@ -3,6 +3,7 @@ from tkinter import ttk
 import tkintermapview
 from geopy.geocoders import Nominatim
 import re
+from logger import logger
 
 DEFAULT_LATITUDE=load_default_latitude()
 DEFAULT_LONGITUDE=load_default_longitude()
@@ -34,7 +35,7 @@ class Map:
                 latitude=float(latitude)
                 longitude=float(longitude)
             except:
-                print("Koordinaten konnten nicht von String zu Float konvertiert werden. Latitude: " + str(latitude) + "; Longitude: " + str(longitude))
+                logger.error("Koordinaten konnten nicht von String zu Float konvertiert werden. Latitude: " + str(latitude) + "; Longitude: " + str(longitude))
 
             if isinstance(latitude, float) and isinstance(longitude, float):
                 self.map_widget.set_position(latitude, longitude)
@@ -58,7 +59,7 @@ class Map:
                 self._set_position_by_coordinates(location.latitude, location.longitude)
                 self._set_marker(location.latitude, location.longitude)
             else:
-                print(f"Address '{address}' could not be geocoded.")
+                logger.warning(f"Address '{address}' could not be geocoded.")
 
 
     def _remove_city_name_from_address(self, address) -> str:

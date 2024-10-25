@@ -4,6 +4,7 @@ from load_env import load_mail, load_password, load_imap_server_address
 from datetime import datetime
 import imaplib
 import email
+from logger import logger
 
 
 connection_established = False # variable to store connection status to avoid fleeding the log file
@@ -16,15 +17,15 @@ def get_mails_from_server():
             mails = _get_unseen_mails()
         except:
             if connection_established == True:
-                print("Failed to get Mails on " + datetime.now().strftime("%d.%m.%Y at %H:%M:%S"))
+                logger.warning("Failed to get Mails")
                 connection_established = False
     else:
         if (connection_established == True):
-            print("Lost internet connection on " + datetime.now().strftime("%d.%m.%Y at %H:%M:%S"))
+            logger.warning("Lost internet connection")
             connection_established = False
         
     if (mails != None and connection_established == False): # connection was lost and is there again or first connection after program start
-        print("Connected to Internet on " + datetime.now().strftime("%d.%m.%Y at %H:%M:%S"))
+        logger.info("Connected to Internet")
         connection_established = True
 
     return mails

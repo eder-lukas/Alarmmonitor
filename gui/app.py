@@ -4,6 +4,7 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import Button
 from datetime import datetime
+from logger import logger
 
 class App:
 
@@ -84,14 +85,14 @@ class App:
 
         self.window.after(10, self._set_value_wraplengths(key_widgets, value_widgets))
         self.map.set_position(latitude, longitude, content[KEYWORD_ADRESSE])
-        print("Anzeigeinhalt aktualisiert am " + datetime.now().strftime("%d.%m.%Y um %H:%M:%S"))
+        logger.info("Anzeigeinhalt aktualisiert")
 
 
     def reset_view(self):
         for widget in self.left_block.winfo_children():
             widget.destroy()
         self.map.reset_map()
-        print("Anzeige zurückgesetzt am " + datetime.now().strftime("%d.%m.%Y um %H:%M:%S"))
+        logger.info("Anzeige zurückgesetzt")
 
 
     def _set_value_wraplengths(self, key_widgets, value_widgets):
