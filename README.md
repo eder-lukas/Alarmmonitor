@@ -10,7 +10,7 @@ Neue Funktionen werden von Zeit zu Zeit auf Github veröffentlicht. Diese müsse
 
 ## E-Mail Adresse zum Empfang von E-Mails
 
-Es wird eine E-Mail Adresse benötigt, um die Alarme zu empfangen. Ich empfehle, eine separate Mail Adresse zu verwenden, die nur für den Alarmmonitor genutzt wird.\
+Es wird eine E-Mail Adresse benötigt, um die Alarme zu empfangen. Ich empfehle, eine separate Mail Adresse zu verwenden, die nur für den Alarmmonitor genutzt wird, da die Zugangsdaten auf dem Raspberry momentan leider noch im Klartext hinterlegt weden müssen.\
 Googlemail bzw. gmail Postfächer funktionieren leider momentan noch nicht. Verwenden Sie stattdessen einen anderen Anbieter, wie z.B. gmx.\
 Im E-Mail Postfach muss in den Einstellungen die Option aktiviert sein, dass die E-Mails über IMAP abgerufen werden dürfen.
 
@@ -114,6 +114,8 @@ FILTER_EMAIL_SUBJECT=Alarmierung
 
 DEFAULT_LATITUDE=48.688687
 DEFAULT_LONGITUDE=11.109092
+
+GATE_CONTROL_ACTIVE=FALSE
 ```
 
 DEFAULT_LATITUDE und -LONGITUDE sind die Koordinaten, welche standardmäßig auf der Karte angezeigt werden, falls keine Alarmierung vorliegt. Hier können z.B. die Koordinaten des eigenen Feuerwehrhauses oder ähnliches verwendet werden. Koordinaten können z.B. [hier](www.koordinaten-umrechner.de) aus der Adresse berechnet werden. 
@@ -144,6 +146,47 @@ Datei /etc/xdg/lxsession/LXDE-pi/autostart öffenen und folgende Zeilen hinzufü
 ```
 
 
+## WIFI-Powersave deaktivieren
+Stromsparmodus des Raspbery-Wlan's deaktivieren, dass die Verbindung aktiv bleibt
+
+Im Terminal:
+``` bash
+iw dev wlan0 get power_save
+```
+Liefert initial "Power save: on" zurück
+
+``` bash
+sudo iw dev wlan0 set power_save off
+iw dev wlan0 get power_save
+```
+Liefert jetzt "Power save: off" zurück
+
+``` bash
+nmcli connection show
+```
+liefert Übersicht mit mehreren Netzwerkverbindungen. Bei der entsprechenden Verbindung (Device wlan0 und name preconfigured oder Wlan-Name) die UUID kopieren. Dazu den Text markieren und Strg+Shift+C drücken. 
+
+Nun die Verbindung bearbeiten und anschließend neustarten:
+``` bash
+sudo nmcli connection modify "<hier UUID einfügen>" 802-11-wireless.powersave 2
+sudo nmcli connectoin down "<hier UUID einfügen>"
+sudo nmcli connectoin up "<hier UUID einfügen>"
+```
+
+## Digital Output Steuerung Setup (optional)
+Falls zusätzlich zu den Alarmmeldungen ein digitaler Ausgang geschalten werden soll, um z.B. das Tor zu öffnen, müssen weitere Setup-Schritte durchgeführt werden. 
+
+``` bash 
+sudo apt install python3-gpiozero python3-lgpio
+```
+
+Außerdem muss im Alarmmonitor.env der Wert für GATE_CONTROL_ACTIVE auf True gesetzt werden:
+
+``` env
+GATE_CONTROL_ACTIVE=TRUE
+```
+
+
 ## Virtuelle Umgebung erstellen: 
 
 Hinweis: Der root folder des Alarmmonitors ist der Ordner, in dem die Datei main.py zu finden ist. 
@@ -153,7 +196,7 @@ Im Terminal:
 cd /root-folder-of-alarmmonitor
 python -m venv venv
 source venv/bin/activate
-pip install python-dotenv tkintermapview geopy
+pip install -r requirements.txt
 python main.py
 ```
 

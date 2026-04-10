@@ -1,6 +1,7 @@
+from gate_control import open_gate
 from mail_client.mail import Mail
 from mail_client.get_mails import get_mails_from_server
-from load_env import load_sender_filter, load_subject_filter
+from load_env import load_sender_filter, load_subject_filter, load_gate_control_active
 from gui.app import App
 import time
 import threading
@@ -26,6 +27,8 @@ def main():
                 if (load_subject_filter() in mail.subject and load_sender_filter() in mail.sender):
                     content = mail.parse_content()
                     app.update_content(content)
+                    if (load_gate_control_active()):
+                        open_gate()
 
         if (gui_thread.is_alive()): # when gui is closed, kill the whole program
             time.sleep(10)

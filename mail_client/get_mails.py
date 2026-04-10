@@ -11,20 +11,15 @@ connection_established = False # variable to store connection status to avoid fl
 def get_mails_from_server():
     global connection_established
     mails = None
-    if (connected_to_internet()):
-        try: # get mails in try except -> otherwise program will crash when the internet connection is interrupted
-            mails = _get_unseen_mails()
-        except:
-            if connection_established == True:
-                logger.warning("Failed to get Mails")
-                connection_established = False
-    else:
-        if (connection_established == True):
-            logger.warning("Lost internet connection")
+    try: # get mails in try except -> otherwise program will crash when the internet connection is interrupted
+        mails = _get_unseen_mails()
+    except:
+        if connection_established == True:
+            logger.warning("Failed to get Mails")
             connection_established = False
         
     if (mails != None and connection_established == False): # connection was lost and is there again or first connection after program start
-        logger.info("Connected to Internet")
+        logger.info("Received Mails successfully again")
         connection_established = True
 
     return mails
