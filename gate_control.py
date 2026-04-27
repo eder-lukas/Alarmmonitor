@@ -5,9 +5,9 @@ from logger import logger
 try:
     from gpiozero import OutputDevice
     GPIO_AVAILABLE = True
-except Exception:
+except Exception as e:
     GPIO_AVAILABLE = False
-    print("GPIO nicht verfügbar – Dummy-Modus aktiv")
+    print(f"GPIO nicht verfügbar – Dummy-Modus aktiv: {e}")
 
 # Global variable for output pin
 alarm_pin = None

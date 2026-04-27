@@ -1,5 +1,4 @@
 from .mail import Mail
-from .connection_check import connected_to_internet
 from load_env import load_mail, load_password, load_imap_server_address
 import imaplib
 import email

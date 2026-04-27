@@ -94,6 +94,8 @@ Im Terminal:
 
 ```bash
 sudo apt-get update && sudo apt-get upgrade
+
+sudo apt install python3-tk python3-pil.imagetk
 ```
 
 Klone das Git-Repo, oder lade die ZIP-Datei herunter und entpacke diese in einen Ordner deiner Wahl. Den Pfad zu dem Ordner werden wir später noch benötigen.
@@ -194,7 +196,7 @@ Hinweis: Der root folder des Alarmmonitors ist der Ordner, in dem die Datei main
 Im Terminal:
 ```bash
 cd /root-folder-of-alarmmonitor
-python -m venv venv
+python -m venv --system-site-packages venv
 source venv/bin/activate
 pip install -r requirements.txt
 python main.py
