@@ -1,6 +1,9 @@
-from load_env import load_default_latitude, load_default_longitude
+from load_env import load_default_latitude, load_default_longitude, load_mail
 from tkinter import ttk
 import tkintermapview
+import tkintermapview.map_widget
+import tkintermapview.offline_loading
+import requests
 from geopy.geocoders import Nominatim
 import re
 from logger import logger
@@ -8,11 +11,40 @@ from logger import logger
 DEFAULT_LATITUDE=load_default_latitude()
 DEFAULT_LONGITUDE=load_default_longitude()
 
+def _build_osm_user_agent() -> str:
+    contact = load_mail()
+    user_agent = "Alarmmonitor/1.0"
+    if contact:
+        user_agent += f" (contact: {contact})"
+    return user_agent
+
+OSM_USER_AGENT = _build_osm_user_agent()
+
+class _UserAgentRequests:
+    def __init__(self, requests_module, user_agent: str) -> None:
+        self._requests = requests_module
+        self._user_agent = user_agent
+
+    def get(self, url, **kwargs):
+        headers = dict(kwargs.pop("headers", None) or {})
+        headers["User-Agent"] = self._user_agent
+        return self._requests.get(url, headers=headers, **kwargs)
+
+    def __getattr__(self, name):
+        return getattr(self._requests, name)
+
+def _patch_tkintermapview_user_agent() -> None:
+    requests_with_user_agent = _UserAgentRequests(requests, OSM_USER_AGENT)
+    tkintermapview.map_widget.requests = requests_with_user_agent
+    tkintermapview.offline_loading.requests = requests_with_user_agent
+
+_patch_tkintermapview_user_agent()
+
 class Map:
     def __init__(self, parent_widget: ttk.Frame) -> None:
         self.parent_widget = parent_widget
         self.map_widget = None
-        self.geolocator = Nominatim(user_agent="Alarmmonitor")
+        self.geolocator = Nominatim(user_agent=OSM_USER_AGENT)
         self._insert_map()
 
 

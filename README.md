@@ -104,7 +104,13 @@ Klone das Git-Repo, oder lade die ZIP-Datei herunter und entpacke diese in einen
 ## Alarmmonitor Environment
 
 Es muss eine alarmmonitor.env Datei im Root-Verzeichnis geben (selbe Ebene wie main.py).\
-Die Datei wird nicht über das Git-Repo mit verteilt und muss somit manuell nach dem folgenden Muster erstellt und angepasst werden.
+Die Datei wird nicht über das Git-Repo mit verteilt. Als Vorlage liegt die alarmmonitor.env.example im Repo bei: diese einfach mit dem untenstehenden cp Befehl kopieren und in alarmmonitor.env umbenennen. Anschließend die Werte manuell anpassen.
+
+```bash
+cp alarmmonitor.env.example alarmmonitor.env
+```
+
+Unter Windows funktioniert auch das Kopieren der Datei im Datei-Explorer. Die Werte in der alarmmonitor.env.example sind Platzhalter und müssen wie im folgenden Muster angepasst werden.
 
 ```
 EMAIL_ADDRESS=deine.email@beispiel.com
@@ -119,6 +125,8 @@ DEFAULT_LONGITUDE=11.109092
 
 GATE_CONTROL_ACTIVE=FALSE
 ```
+
+Hinweis zur EMAIL_ADDRESS: Diese Adresse wird nicht nur für den Mailabruf verwendet, sondern auch als Kontaktinformation bei Anfragen an OpenStreetMap (Kartenkacheln und Adressauflösung) mitgesendet, um deren Nutzungsrichtlinie einzuhalten (https://operations.osmfoundation.org/policies/tiles/).\
 
 DEFAULT_LATITUDE und -LONGITUDE sind die Koordinaten, welche standardmäßig auf der Karte angezeigt werden, falls keine Alarmierung vorliegt. Hier können z.B. die Koordinaten des eigenen Feuerwehrhauses oder ähnliches verwendet werden. Koordinaten können z.B. [hier](www.koordinaten-umrechner.de) aus der Adresse berechnet werden. 
 
