@@ -1,11 +1,17 @@
 from load_env import load_default_latitude, load_default_longitude, load_mail
+import tkinter
 from tkinter import ttk
 import tkintermapview
 import tkintermapview.map_widget
 import tkintermapview.offline_loading
 import requests
 from geopy.geocoders import Nominatim
+from geopy.location import Location
+import json
+import os
 import re
+import threading
+import time
 from logger import logger
 
 DEFAULT_LATITUDE=load_default_latitude()
@@ -19,6 +25,49 @@ def _build_osm_user_agent() -> str:
     return user_agent
 
 OSM_USER_AGENT = _build_osm_user_agent()
+
+OSM_MIN_REQUEST_INTERVAL_SECONDS = 1.0
+_osm_request_lock = threading.Lock()
+_last_osm_request = 0.0
+
+# at most one Nominatim (OpenStreetMap) request per second allowed
+
+def _throttle_nominatim_request() -> None:
+    global _last_osm_request
+    with _osm_request_lock:
+        wait = _last_osm_request + OSM_MIN_REQUEST_INTERVAL_SECONDS - time.monotonic()
+        if wait > 0:
+            time.sleep(wait)
+        _last_osm_request = time.monotonic()
+
+GEOCODE_CACHE_FILE = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "alarmmonitor_geocache.json")
+_geocode_cache_lock = threading.Lock()
+_geocode_cache = {}
+
+def _load_geocode_cache() -> None:
+    global _geocode_cache
+    try:
+        with open(GEOCODE_CACHE_FILE, encoding="utf-8") as file:
+            data = json.load(file)
+        if isinstance(data, dict):
+            _geocode_cache = {
+                address: (float(coords[0]), float(coords[1]))
+                for address, coords in data.items()
+                if isinstance(coords, (list, tuple)) and len(coords) == 2
+            }
+    except FileNotFoundError:
+        pass
+    except:
+        logger.warning("Adress-Cache konnte nicht gelesen werden. Starte ohne Cache.")
+
+def _save_geocode_cache() -> None:
+    try:
+        with open(GEOCODE_CACHE_FILE, "w", encoding="utf-8") as file:
+            json.dump(_geocode_cache, file, ensure_ascii=False, indent=1)
+    except:
+        logger.warning("Adress-Cache konnte nicht geschrieben werden.")
+
+_load_geocode_cache()
 
 class _UserAgentRequests:
     def __init__(self, requests_module, user_agent: str) -> None:
@@ -51,7 +100,13 @@ class Map:
     def _insert_map(self):
         self.map_widget = tkintermapview.TkinterMapView(self.parent_widget)
         self.map_widget.grid(row=0, column=0, sticky='nesw')
+        self._insert_attribution_label()
         self.reset_map()
+
+
+    def _insert_attribution_label(self):
+        self.attribution_label = tkinter.Label(self.map_widget, text="\u00a9 OpenStreetMap contributors", background="white", font=("Helvetica", 10))
+        self.attribution_label.place(relx=1.0, rely=1.0, anchor='se')
 
 
     def set_position(self, latitude, longitude, address):
@@ -78,13 +133,13 @@ class Map:
         if address:
             location = None
             try:
-                location = self.geolocator.geocode(address)
+                location = self._geocode(address)
             except:
                 pass
             if not(location):
                 address_without_city_name = self._remove_city_name_from_address(address)
                 try:
-                    location = self.geolocator.geocode(address_without_city_name)
+                    location = self._geocode(address_without_city_name)
                 except:
                     pass
             if location:
@@ -92,6 +147,21 @@ class Map:
                 self._set_marker(location.latitude, location.longitude)
             else:
                 logger.warning(f"Address '{address}' could not be geocoded.")
+
+
+    def _geocode(self, address):
+        with _geocode_cache_lock:
+            cached = _geocode_cache.get(address)
+        if cached:
+            logger.info("got geocode location from cache")
+            return Location(address, cached, {})
+        _throttle_nominatim_request()
+        location = self.geolocator.geocode(address)
+        if location:
+            with _geocode_cache_lock:
+                _geocode_cache[address] = (float(location.latitude), float(location.longitude))
+                _save_geocode_cache()
+        return location
 
 
     def _remove_city_name_from_address(self, address) -> str:

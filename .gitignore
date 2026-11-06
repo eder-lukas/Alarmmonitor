@@ -3,6 +3,8 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+alarmmonitor_geocache.json
+
 # C extensions
 *.so
 
